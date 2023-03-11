@@ -5,6 +5,13 @@ async function findPaymentByTicketId(ticketId: number) {
   return prisma.payment.findFirst({
     where: {
       ticketId,
+    },
+    include:{
+      Ticket: {
+        include:{
+          TicketType: true
+        }
+      }
     }
   });
 }
