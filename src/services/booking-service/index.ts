@@ -41,8 +41,8 @@ async function bookingRoomById(userId: number, roomId: number) {
   await checkEnrollmentTicket(userId);
   await checkValidBooking(roomId);
   const booking = await bookingRepository.findByUserId(userId);
-  if(booking){
-    return changeBookingRoomById(userId,roomId);
+  if(booking) {
+    return changeBookingRoomById(userId, roomId);
   }
   return bookingRepository.create({ roomId, userId });
 }
