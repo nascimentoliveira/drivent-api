@@ -20,8 +20,13 @@ async function findActivities(): Promise<
     },
   });
 }
+
+async function findActivitiesLocals(): Promise<ActivityLocal[]> {
+  return prisma.activityLocal.findMany();
+}
 const activitiesRepository = {
   findActivities,
+  findActivitiesLocals,
 };
 
 export default activitiesRepository;

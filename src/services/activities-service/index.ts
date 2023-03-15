@@ -32,8 +32,15 @@ async function getActivities(userId: number): Promise<
   return activities;
 }
 
+async function getActivitiesLocals(): Promise<ActivityLocal[]>{
+ 
+  const activitiesLocals = await activitiesRepository.findActivitiesLocals();
+  return activitiesLocals;
+}
+
 const activitiesService = {
   getActivities,
+  getActivitiesLocals
 };
 
 export default activitiesService;
