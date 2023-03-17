@@ -5,12 +5,13 @@ import ticketRepository from "@/repositories/ticket-repository";
 import { Activity, ActivityLocal } from "@prisma/client";
 
 async function getActivities(userId: number): Promise<
-  (Activity & {
-    ActivityLocal: ActivityLocal;
-    ActivityRegistration: {
-      id: number;
-    }[];
-  })[]
+  Record<string, Record<string, (ActivityLocal & {
+    Activity: (Activity & {
+      ActivityRegistration: {
+        id: number,
+      }[]
+    })[]
+  })>>
 > {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) {
@@ -26,27 +27,30 @@ async function getActivities(userId: number): Promise<
   }
 
   type ActivityAndRegistration = (Activity & {
-      ActivityRegistration: {
-          id: number,
-      }[]
-    });
+    ActivityRegistration: {
+      id: number,
+    }[]
+  });
 
-  const locals: (ActivityLocal & { Activity: ActivityAndRegistration[]})[] = await activitiesRepository.findActivitiesByLocals();
-  const localsByDate: any = {};
+  const locals: (ActivityLocal & { Activity: ActivityAndRegistration[] })[] = await activitiesRepository.findActivitiesByLocals();
+  const localsByDate: Record<string, Record<string, (ActivityLocal & { Activity: ActivityAndRegistration[] })>> = {};
 
   locals.map((local) => {
     local.Activity.map((activity) => {
       const activityDate = formatDate(new Date(activity.startsAt).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" }));
       if (!localsByDate[activityDate]) {
         localsByDate[activityDate] = {};
+        locals.map(l => {
+          localsByDate[activityDate][l.id] = {
+            ...l,
+            Activity: [],
+          };
+        });
       }
-      localsByDate[activityDate][local.id] = {
-        ...local,
-        Activity: local.Activity.filter((a: any) => formatDate(new Date(activity.startsAt).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" })) === activityDate)
-      };
+      localsByDate[activityDate][local.id].Activity = local.Activity.filter((a) => formatDate(new Date(a.startsAt).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" })) === activityDate);
     });
   });
-
+  
   return localsByDate;
 }
 
@@ -54,14 +58,8 @@ function formatDate(date: string): string {
   return (date.charAt(0).toUpperCase() + date.slice(1)).replace("-feira", "");
 }
 
-async function getActivitiesLocals(): Promise<ActivityLocal[]> {
-  const activitiesLocals = await activitiesRepository.findActivitiesLocals();
-  return activitiesLocals;
-}
-
 const activitiesService = {
   getActivities,
-  getActivitiesLocals
 };
 
 export default activitiesService;
