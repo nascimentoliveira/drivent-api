@@ -1,8 +1,8 @@
-import { notFoundError } from '@/errors';
-import activitiesRepository from '@/repositories/activities-repository';
-import enrollmentRepository from '@/repositories/enrollment-repository';
-import ticketRepository from '@/repositories/ticket-repository';
-import { Activity, ActivityLocal } from '@prisma/client';
+import { notFoundError } from "@/errors";
+import activitiesRepository from "@/repositories/activities-repository";
+import enrollmentRepository from "@/repositories/enrollment-repository";
+import ticketRepository from "@/repositories/ticket-repository";
+import { Activity, ActivityLocal } from "@prisma/client";
 
 async function getActivities(userId: number): Promise<
   (Activity & {
@@ -21,19 +21,40 @@ async function getActivities(userId: number): Promise<
     throw notFoundError();
   }
 
-  if (ticket.status !== 'PAID') {
+  if (ticket.status !== "PAID") {
     throw notFoundError();
   }
 
-  /* if(ticket.TicketType.isRemote){
-        throw
-      } */
-  const activities = await activitiesRepository.findActivities();
-  return activities;
+  type ActivityAndRegistration = (Activity & {
+      ActivityRegistration: {
+          id: number,
+      }[]
+    });
+
+  const locals: (ActivityLocal & { Activity: ActivityAndRegistration[]})[] = await activitiesRepository.findActivitiesByLocals();
+  const localsByDate: any = {};
+
+  locals.map((local) => {
+    local.Activity.map((activity) => {
+      const activityDate = formatDate(new Date(activity.startsAt).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" }));
+      if (!localsByDate[activityDate]) {
+        localsByDate[activityDate] = {};
+      }
+      localsByDate[activityDate][local.id] = {
+        ...local,
+        Activity: local.Activity.filter((a: any) => formatDate(new Date(activity.startsAt).toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "2-digit" })) === activityDate)
+      };
+    });
+  });
+
+  return localsByDate;
 }
 
-async function getActivitiesLocals(): Promise<ActivityLocal[]>{
- 
+function formatDate(date: string): string {
+  return (date.charAt(0).toUpperCase() + date.slice(1)).replace("-feira", "");
+}
+
+async function getActivitiesLocals(): Promise<ActivityLocal[]> {
   const activitiesLocals = await activitiesRepository.findActivitiesLocals();
   return activitiesLocals;
 }
