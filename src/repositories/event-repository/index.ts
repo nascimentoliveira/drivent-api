@@ -9,7 +9,6 @@ async function findFirst() {
   if (data != null) {
     return data;
   }
-
   const freshData = await prisma.event.findFirst();
   redis.setEx(cacheKey, EXPIRATION, JSON.stringify(freshData));
   return freshData;

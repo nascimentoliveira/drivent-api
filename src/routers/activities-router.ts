@@ -7,7 +7,7 @@ const activitiesRouter = Router();
 activitiesRouter
   .all("/*", authenticateToken)
   .get("", listActivities)
-  .get("/locals",listActivitiesLocals)
+  .get("/locals", listActivitiesLocals)
   .post("/:activityId", )
   .delete("/:activityId", );
 
