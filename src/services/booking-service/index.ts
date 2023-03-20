@@ -2,14 +2,14 @@ import { cannotBookingError, notFoundError } from "@/errors";
 import roomRepository from "@/repositories/room-repository";
 import bookingRepository from "@/repositories/booking-repository";
 import enrollmentRepository from "@/repositories/enrollment-repository";
-import tikectRepository from "@/repositories/ticket-repository";
+import ticketRepository from "@/repositories/ticket-repository";
 
 async function checkEnrollmentTicket(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
   if (!enrollment) {
     throw cannotBookingError();
   }
-  const ticket = await tikectRepository.findTicketByEnrollmentId(enrollment.id);
+  const ticket = await ticketRepository.findTicketByEnrollmentId(enrollment.id);
 
   if (!ticket || ticket.status === "RESERVED" || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) {
     throw cannotBookingError();
