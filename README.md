@@ -1,132 +1,158 @@
-# drivent-back
+![created date - drivent-api](https://img.shields.io/date/1677553200?color=007ec6&label=created&style=flat-square)
+![license - drivent-api](https://img.shields.io/github/license/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
+![last commit - drivent-api](https://img.shields.io/github/last-commit/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
+![repo size - drivent-api](https://img.shields.io/github/repo-size/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
+![files - drivent-api](https://img.shields.io/github/directory-file-count/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
+![language - drivent-api](https://img.shields.io/github/languages/top/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
+![stars - drivent-api](https://img.shields.io/github/stars/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
+![forks - drivent-api](https://img.shields.io/github/forks/nascimentoliveira/drivent-api?color=007ec6&style=flat-square)
 
-Back-end for Driven.t, an event management solution.
+# API (Back-end) da Aplicação Driven.t
 
-:)
+Aqui você encontrará informações sobre a estrutura da API, como executá-la localmente, configurar as dependências e realizar as requisições corretamente.
 
-## About
+> O código-fonte do front-end da aplicação está hospedado no GitHub em: [Driven.t Front-end](https://github.com/nascimentoliveira/drivent)
 
-Driven.t is a web browser application with which you can manage every single aspect of your event.
+> Driven.t atualmente pode ser experimentado em: [Driven.t Live Demo](https://nascimentoliveira-drivent.vercel.app)
+>  
+>> *A primeira requisição ao Live Demo pode levar um pouco mais de tempo para carregar. Isso ocorre porque os servidores são ativados conforme necessário e podem levar alguns instantes para iniciar!*
 
-## How to run for development
+## Tecnologias Utilizadas
 
-1. Clone this repository
-2. Install all dependencies
+A API da aplicação Driven.t foi desenvolvido utilizando as seguintes tecnologias:
 
-```bash
-npm i
-```
+- Linguagem de Programação: [Javascript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference).
 
-3. Create a PostgreSQL database with whatever name you want
-4. Configure the `.env.development` file using the `.env.example` file (see "Running application locally or inside docker section" for details)
-5. Run all migrations
+- Back-end
+   - [TypeScript](https://www.typescriptlang.org/): Linguagem de programação de código aberto que estende a sintaxe do JavaScript, fornecendo tipagem estática opcional e outros recursos para melhorar o desenvolvimento.
+   - [Node.js](https://nodejs.org/en/about): Plataforma de desenvolvimento JavaScript assíncrona baseada no motor V8 do Chrome.
+   - [Express.js](https://expressjs.com/pt-br/): Framework web rápido e minimalista para Node.js.
+   - [Dotenv](https://www.npmjs.com/package/dotenv): Pacote para carregar variáveis de ambiente a partir de um arquivo .env.
+   - [Bcrypt](https://www.npmjs.com/package/bcrypt): Biblioteca para criptografia de senhas.
+   - [Joi](https://joi.dev/): Biblioteca para validação de dados.
+   - [JWT](https://www.npmjs.com/package/jsonwebtoken): Biblioteca para geração e validação de tokens de autenticação.
+   - [http-status](https://www.npmjs.com/package/http-status): Biblioteca utilizada para padronizar e facilitar o uso dos códigos de status HTTP em respostas do servidor.
+   - [Jest](https://jestjs.io/): Framework de teste JavaScript com foco na simplicidade e na experiência do desenvolvedor. Utilizado para testes unitários e de integração.
+   - [Supertest](https://www.npmjs.com/package/supertest): Biblioteca utilizada para testar APIs HTTP de forma fácil e eficiente. Utilizada em conjunto com o Jest para realizar testes de integração.
 
-```bash
-npm run migration:run
-```
+- Banco de Dados: 
+  - [PostgreSQL](https://www.postgresql.org/about/): Sistema de gerenciamento de banco de dados relacional, utilizado para armazenar e persistir os dados da aplicação.
+  - [Redis](https://redis.io/): Banco de dados em memória de código aberto, utilizado para armazenamento de cache.
+  - [Prisma ORM](https://www.prisma.io/): ORM (Object-Relational Mapping) de banco de dados, utilizado para facilitar a comunicação e manipulação de dados com o banco de dados PostgreSQL.
 
-6. Seed db
 
-```bash
-npm run dev:seed
-```
+Essas tecnologias foram escolhidas para proporcionar uma experiência de desenvolvimento moderna, eficiente e escalável.
 
-6. Run the back-end in a development environment:
+## Pré-requisitos
 
-```bash
-npm run dev
-```
+Antes de começar, certifique-se de ter as seguintes ferramentas instaladas em seu computador:
+-   Node.js (versão 16 ou superior)
+-   NPM (versão 7 ou superior)
 
-## How to run tests
+## Instalação
 
-1. Follow the steps in the last section
-1. Configure the `.env.test` file using the `.env.example` file (see "Running application locally or inside docker" section for details)
-1. Run all migrations
+Siga as etapas abaixo para instalar, configurar e executar a API localmente:
 
-```bash
-npm run migration:run
-```
+1. Clone o repositório do projeto:
+    ```bash
+    git clone https://github.com/nascimentoliveira/drivent-api.git
+    ```
+2. Acesse o diretório do projeto:
+    ```bash
+    cd drivent-api
+    ```
+3. Instale as dependências do projeto:
+    ```bash
+    npm install
+    ```
+4. Configure as variáveis de ambiente:  
+   Antes de executar a aplicação, é necessário configurar as variáveis de ambiente corretamente. Siga os passos abaixo:
+   -  Renomeie o arquivo `.env.example` para `.env`:
+      ```bash
+      m .env.example .env
+      ```
+   - Abra o arquivo `.env` em um editor de texto.
+   - Procure a variável `DATABASE_URL` e defina-a com as configurações de acesso ao banco de dados. Exemplo:  
+      ```bash
+      DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
+      ```
+   - Procure a variável `REDIS_URL` e defina-a com as configurações de conexão ao banco de dados em memória REDIS, que é amplamente utilizado como um armazenamento de chave-valor de alto desempenho. Exemplo:  
+      ```bash
+      REDIS_URL=redis://${REDIS_HOST}:${REDIS_PORT}
+      ```
+   - Procure a variável `JWT_SECRET` e configure a chave secreta usada para assinar e verificar os tokens JWT (JSON Web Tokens). Esta chave é usada para garantir a segurança e integridade dos tokens de autenticação. Certifique-se de definir uma chave forte e segura para esta variável de ambiente. Exemplo:  
+      ```bash
+      JWT_SECRET="jwt_secret"
+      ```
+   - Verifique se existem outras variáveis de ambiente necessárias para o funcionamento da aplicação e defina-as de acordo com a sua configuração.
+   - Salve o arquivo `.env`.
+    
+   *Certifique-se de não compartilhar o arquivo `.env` contendo informações sensíveis, como senhas, chaves de API ou tokens de acesso. Mantenha-o seguro e fora do controle de versão do seu repositório.*
 
-3. Run test:
-   (locally)
+   Após configurar as variáveis de ambiente, a aplicação estará pronta para ser executada.
 
-```bash
-npm run test
-```
+5. Realize as migrações do Prisma ORM para criar a estrutura do banco de dados. Execute o seguinte comando:
 
-(docker)
+   ```bash
+   npm run dev:migration:run
+   ```
 
-```bash
-npm run test:docker
-```
+   Isso aplicará as migrações pendentes no banco de dados especificado no arquivo `.env`, criando as tabelas e as relações necessárias.
 
-## Building and starting for production
+6. Execute o `seed` para popular o banco de dados com dados iniciais. Execute o seguinte comando:
+   ```bash
+   npm run dev:migration:run
+   ```
+Isso executará o seed do banco de dados especificado no arquivo `.env`, adicionando dados iniciais para testar a aplicação.
 
-```bash
-npm run build
-npm start
-```
+## Executando a API
 
-## Running migrations or generate prisma clients
+Após a configuração, você pode iniciar a API executando o seguinte comando:
+  ```bash
+  npm run dev
+  ```
+A API será iniciada e estará pronta para receber requisições.
+O servidor será iniciado na porta especificada no arquivo `.env` (por padrão, é a porta 4000).
+  ```bash
+  http://localhost:4000/api
+  ```
+ou 
+  ```bash
+  http://localhost:<porta_especificada>/api
+  ```
 
-Before running migrations make sure you have a postgres db running based on `.env.development` or `.env.test` file for each environment. You can start a postgres instance by typing `npm run dev:postgres` or `npm run test:postgres`. The host name is the name of the postgres container inside docker-compose file if you are running the application inside a docker container or localhost if you are running it locally.
+## Endpoints* 🛠
 
-You can operate on databases for different environments, but it is necessary to populate correct env variables for each environment first, so in order to perform db operations type the following commands:
+**Uma descrição detalhada desssa seção está sendo construída!*
 
-- `npm run dev:migration:run` - run migrations for development environment by loading envs from .env.development file. It uses [dotenv-cli](https://github.com/entropitor/dotenv-cli#readme) to load envs from .env.development file.
-- `npm run test:migration:run` - the same, but for test environment
+<!-- A API do Drive.t possui os seguintes endpoints disponíveis: -->
 
-- `npm run dev:migration:generate -- --name ATOMIC_OPERATION_NAME` - generate and run migration and prisma client for development environment by loading envs from .env.development file. Replace `ATOMIC_OPERATION_NAME` by the name of the migration you want to generate.
+## Contribuição
 
-## Switching between environments
+Se você deseja contribuir para o projeto, siga os passos abaixo:
 
-In order to switch between development and test environments you need to shutdown the current postgres instance if it is running and start the new one.
+1. Faça um `fork` do repositório.
+2. Crie uma nova `branch` com a sua contribuição: 
+    ```bash
+    git checkout -b <sua-contribuicao>
+    ```
+3. Faça as suas modificações  no código.
+4. Faça `commit` das suas alterações:
+    ```bash
+    git commit -m "Sua contribuição"
+    ```
+5. Envie as alterações para o repositório remoto: .
+    ```bash
+    git push origin <sua-contribuicao>
+    ```
+6. Abra um `pull request` no repositório original, descrevendo as modificações realizadas.
 
-If you are in development environment:
+Se te ajudei de alguma forma, ficarei feliz em saber. Se possível:  
+⭐️ dê uma estrela para este projeto; e   
+🪲 Encontre e relate `issues`
 
-```bash
-npm run dev:postgres:down
-```
+## Licença
 
-And then
+Este projeto é licenciado sob a licença [MIT](https://choosealicense.com/licenses/mit/). Consulte o arquivo LICENSE para obter mais informações.
 
-```bash
-npm run test:postgres
-```
-
-If you are in test environment:
-
-```bash
-npm run test:postgres:down
-```
-
-And then
-
-```bash
-npm run dev:postgres
-```
-
-## Running application locally or inside docker
-
-`.env.development` and `.env.test` must be changed if you and to run the application locally or inside docker. You can populate files based on `.env.example` file, but you need to consider the following:
-
-- Running application locally (postgres and node):
-
-Add your postgres credentials and make sure to create given database before running the application.
-
-- Running application inside docker (postgres and node):
-
-Set `POSTGRES_HOST` to `drivent-postgres-development` for `.env.development` and `drivent-postgres-test` for `.env.test` file. It is the name of the postgres container inside docker-compose file. Docker Compose will start the postgres container for you, create the database and host alias for you.
-
-- Running application locally (node) but postgres is running inside docker:
-
-Set `POSTGRES_HOST` to `localhost` for `.env.development` and `localhost` for `.env.test` file. Docker compose is configured to expose postgres container to your localhost.
-
-## What to do when add new ENV VARIABLES
-
-There are several things you need to do when you add new ENV VARIABLES:
-- Add them to `.env.example` file
-- Add them to your local `.env.development` and `.env.test` files
-- Add them to your docker-compose.yml file (just the name, not the value). Only envs listed in the environment section will be exposed to your docker container.
-- Add them (prod version) to your github repo secrets. They will be used to generate the `.env` file on deploy.
-- Add them (prod version) to test.yml file on .github/workflows/test.yml.
+Disponibilizado por [Thiago Oliveira](https://www.linkedin.com/in/nascimentoliveira/).
