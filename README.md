@@ -69,7 +69,7 @@ Siga as etapas abaixo para instalar, configurar e executar a API localmente:
    Antes de executar a aplicação, é necessário configurar as variáveis de ambiente corretamente. Siga os passos abaixo:
    -  Renomeie o arquivo `.env.example` para `.env`:
       ```bash
-      m .env.example .env
+      mv .env.example .env
       ```
    - Abra o arquivo `.env` em um editor de texto.
    - Procure a variável `DATABASE_URL` e defina-a com as configurações de acesso ao banco de dados. Exemplo:  
@@ -101,7 +101,7 @@ Siga as etapas abaixo para instalar, configurar e executar a API localmente:
 
 6. Execute o `seed` para popular o banco de dados com dados iniciais. Execute o seguinte comando:
    ```bash
-   npm run dev:migration:run
+   npm run dev:seed
    ```
 Isso executará o seed do banco de dados especificado no arquivo `.env`, adicionando dados iniciais para testar a aplicação.
 
